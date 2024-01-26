@@ -59,5 +59,9 @@ namespace NieruchApp.Client.Services
                 }
                 ];
         }
+        public async Task<ValuationResultDto> CalculatePrice(ValuationSummaryDto valuationSummary)
+        {
+            return new ValuationResultDto() { EstimatedPrice = 10000.543 };
+        }
     }
 }

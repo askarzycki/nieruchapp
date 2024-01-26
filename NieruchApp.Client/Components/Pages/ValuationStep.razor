@@ -10,7 +10,7 @@
     <MudCardContent>
         <MudText>@Step.Prompt</MudText>
         <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-            <MudRadioGroup T="ValuationStepOptionDto" Value="selectedOption">
+            <MudRadioGroup T="ValuationStepOptionDto" @bind-value="selectedOption" Disabled="@isClosed">
 
             @foreach (var option in Step.Options)
                   {
@@ -20,8 +20,8 @@
             </MudRadioGroup>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="Approve" Disabled="@isClosed">Zatwierdź</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" Disabled="@isClosed">Pomiń</MudButton>
     </MudCardActions>
 </MudCard>
 
@@ -29,5 +29,23 @@
     [Parameter]
     public ValuationStepDto Step { get; set; }
 
-    ValuationStepOptionDto selectedOption = null;
+    [Parameter]
+    public EventCallback<ValuationStepOptionDto> OnApproval { get; set; }
+
+    ValuationStepOptionDto? selectedOption = null;
+
+    bool isClosed = false;
+
+    async Task Approve()
+    {
+        isClosed = true;
+
+        await OnApproval.InvokeAsync(selectedOption);
+    }
+
+    async Task Skip()
+    {
+        selectedOption = null;
+        isClosed = true;
+    }
 }

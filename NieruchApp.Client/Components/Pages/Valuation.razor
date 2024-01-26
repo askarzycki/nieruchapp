@@ -37,84 +37,22 @@
 
     @foreach (var valuationStep in valuationSteps)
     {
-        <ValuationStep Step="@valuationStep" />
+        <ValuationStep Step="@valuationStep" OnApproval="UpdateValuationSummary" />
     }
+ 
 
- @*    <MudCard Class="mx-10">
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h5">Lokalizacja</MudText>
-            </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudText>Wybierz dzielnicę Warszawy z listy poniżej.</MudText>
-            <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-            <MudSelect T="DistrictDto" @bind-Value="selectedDistrict" ToStringFunc="@((x) => x?.DistrictName)" AnchorOrigin="Origin.BottomCenter" Clearable>
-                @foreach(var district in districts)
-                {
-                    <MudSelectItem T="DistrictDto" Value="@district" />
-                }
-            </MudSelect>
-           
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard Class="mx-10">
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h5">Wiek budynku</MudText>
-            </CardHeaderContent>
-        </MudCardHeader>tyl
-        <MudCardContent>
-            <MudText >Wybierz odpowiedni przedział wiekowy</MudText>
-            <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-            <MudRadioGroup T="int">
-                <MudRadio Value="1" Color="Color.Primary" UnCheckedColor="Color.Default">Nowy (do 5 lat)</MudRadio>
-                <MudRadio Value="2" Color="Color.Secondary" UnCheckedColor="Color.Default"> 5 - 15 lat</MudRadio>
-                <MudRadio Value="3" Color="Color.Success" UnCheckedColor="Color.Error">15 -  30 lat</MudRadio>
-                <MudRadio Value="4" Color="Color.Primary" Disabled="true"> powyżej 30 lat</MudRadio>
-            </MudRadioGroup>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard>
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h5">Piętro</MudText>
-            </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudText>Wybierz piętro. Piętra środkowe to kondygnacje od drugiej do przedostatniej.</MudText>
-            <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-            <MudRadioGroup T="int">
-                <MudRadio Value="1" Color="Color.Primary" UnCheckedColor="Color.Default">Parter</MudRadio>
-                <MudRadio Value="2" Color="Color.Secondary" UnCheckedColor="Color.Default">Środkowe piętro</MudRadio>
-                <MudRadio Value="3" Color="Color.Success" UnCheckedColor="Color.Error">Ostatnie piętro</MudRadio>                
-            </MudRadioGroup>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
-        </MudCardActions>
-    </MudCard> *@
 </MudPaper>
 
 
 @code {
 
-    List<ValuationStepDto> valuationSteps = new(); 
+    List<ValuationStepDto> valuationSteps = new();
+
+    List<DistrictDto> districts;
 
     DistrictDto? selectedDistrict;
 
-    List<DistrictDto> districts;
+    List<ValuationStepOptionDto> selectedOptions = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -122,5 +60,10 @@
 
         districts = [new() { DistrictId = 1, DistrictName = "Bemowo" }, new() { DistrictId = 2, DistrictName = "Bielany" }];
         valuationSteps = await ValuationService.GetValuationSteps();
+    }
+
+    void UpdateValuationSummary(ValuationStepOptionDto option)
+    {
+        selectedOptions.Add(option);        
     }
 }
