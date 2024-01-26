@@ -1,5 +1,6 @@
 using MudBlazor.Services;
 using NieruchApp.Client.Components;
+using NieruchApp.Client.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
+builder.Services.AddScoped<ValuationService>();
 
 var app = builder.Build();
 

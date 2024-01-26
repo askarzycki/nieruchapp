@@ -1,0 +1,33 @@
+﻿@using MudBlazor
+@using NieruchApp.Client.Models
+
+<MudCard Class="mx-10">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">@Step.Header</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText>@Step.Prompt</MudText>
+        <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+            <MudRadioGroup T="ValuationStepOptionDto" Value="selectedOption">
+
+            @foreach (var option in Step.Options)
+                  {
+                      <MudRadio Value="@option" Color="Color.Primary" UnCheckedColor="Color.Default">@option.Label</MudRadio>
+                  }
+
+            </MudRadioGroup>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public ValuationStepDto Step { get; set; }
+
+    ValuationStepOptionDto selectedOption = null;
+}

@@ -1,14 +1,17 @@
 ﻿@page "/valuation"
 @using MudBlazor
+@using NieruchApp.Client.Models
+@using NieruchApp.Client.Services
+@inject ValuationService ValuationService
+
+<PageTitle>Nowa wycena</PageTitle>
 
 <MudContainer Class="mx-2">
     <MudText Typo="Typo.h3" Class="my-2">Nowa wycena</MudText>
     <MudDivider DividerType="DividerType.FullWidth" />
 </MudContainer>
 
-
 <MudPaper Width="100%" Class="d-inline-flex py-3" Elevation="0">
-
     <MudCard Class="mx-10">
         <MudCardHeader>
             <CardHeaderContent>
@@ -18,10 +21,38 @@
         <MudCardContent>
             <MudText>Wybierz dzielnicę Warszawy z listy poniżej.</MudText>
             <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-            <MudSelect T="District" @bind-Value="selectedDistrict" ToStringFunc="@((x) => x?.DistrictName)" AnchorOrigin="Origin.BottomCenter" Clearable>
+            <MudSelect T="DistrictDto" @bind-Value="selectedDistrict" ToStringFunc="@((x) => x?.DistrictName)" AnchorOrigin="Origin.BottomCenter" Clearable>
+                @foreach (var district in districts)
+                {
+                    <MudSelectItem T="DistrictDto" Value="@district" />
+                }
+            </MudSelect>
+
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    @foreach (var valuationStep in valuationSteps)
+    {
+        <ValuationStep Step="@valuationStep" />
+    }
+
+ @*    <MudCard Class="mx-10">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5">Lokalizacja</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText>Wybierz dzielnicę Warszawy z listy poniżej.</MudText>
+            <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+            <MudSelect T="DistrictDto" @bind-Value="selectedDistrict" ToStringFunc="@((x) => x?.DistrictName)" AnchorOrigin="Origin.BottomCenter" Clearable>
                 @foreach(var district in districts)
                 {
-                    <MudSelectItem T="District" Value="@district" />
+                    <MudSelectItem T="DistrictDto" Value="@district" />
                 }
             </MudSelect>
            
@@ -37,7 +68,7 @@
             <CardHeaderContent>
                 <MudText Typo="Typo.h5">Wiek budynku</MudText>
             </CardHeaderContent>
-        </MudCardHeader>
+        </MudCardHeader>tyl
         <MudCardContent>
             <MudText >Wybierz odpowiedni przedział wiekowy</MudText>
             <MudDivider DividerType="DividerType.Middle" Class="my-6" />
@@ -73,20 +104,23 @@
             <MudButton Variant="Variant.Text" Color="Color.Primary">Zatwierdź</MudButton>
             <MudButton Variant="Variant.Text" Color="Color.Primary">Pomiń</MudButton>
         </MudCardActions>
-    </MudCard>
+    </MudCard> *@
 </MudPaper>
 
 
 @code {
-    class District
+
+    List<ValuationStepDto> valuationSteps = new(); 
+
+    DistrictDto? selectedDistrict;
+
+    List<DistrictDto> districts;
+
+    protected override async Task OnInitializedAsync()
     {
-        public int DistrictId { get; set; }
+        await base.OnInitializedAsync();
 
-        public string DistrictName { get; set; }
+        districts = [new() { DistrictId = 1, DistrictName = "Bemowo" }, new() { DistrictId = 2, DistrictName = "Bielany" }];
+        valuationSteps = await ValuationService.GetValuationSteps();
     }
-
-    District? selectedDistrict;
-
-    List<District> districts = [new() { DistrictId = 1, DistrictName = "Bemowo" }, new() { DistrictId = 2, DistrictName = "Bielany" }, new() { DistrictId = 3, DistrictName = "Gdzie jest kurewa Piaseczno???" }];
-
 }
