@@ -5,7 +5,7 @@ namespace NieruchApp.Client.Services
 {
     public class ValuationService
     {
-        public async Task<List<ValuationStepDto>> GetValuationSteps()
+        public async Task<ValuationStepDto[]> GetValuationSteps()
         {
             return [
                 new ValuationStepDto()
@@ -54,6 +54,38 @@ namespace NieruchApp.Client.Services
                         {
                             OptionId = 23,
                             Label = "Ostatnie piętro"
+                        }
+                    ]
+                },
+                new ValuationStepDto()
+                {
+                    Header = "Bezpośrednie otoczenie",
+                    Prompt = "",
+                    Options = [
+                        new()
+                        {
+                            OptionId = 31,
+                            Label = "Historyczna zabudowa (kamienice, wille miejskie)"
+                        },
+                        new()
+                        {
+                            OptionId = 32,
+                            Label = "Nowe budownictwo i/lub domy jednorodzinne"
+                        },
+                        new()
+                        {
+                            OptionId = 33,
+                            Label = "Tereny mieszkalne z przewagą starszego budownictwa"
+                        },
+                        new()
+                        {
+                            OptionId = 34,
+                            Label = "Tereny usługowe (magazyny, sklepy wielkopwierzchniowe, parkingi)"
+                        },
+                        new()
+                        {
+                            OptionId = 35,
+                            Label = "Tereny przemysłowe (w tym uciążliwe zakłady, składowiska odpadów, stacje paliw itp.)"
                         }
                     ]
                 }

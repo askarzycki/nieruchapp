@@ -1,6 +1,7 @@
 ﻿@using MudBlazor
 @using NieruchApp.Client.Models
 
+
 <MudCard Class="mx-10">
     <MudCardHeader>
         <CardHeaderContent>
@@ -20,9 +21,14 @@
             </MudRadioGroup>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="Approve" Disabled="@isClosed">Zatwierdź</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="(() => Approve())" Disabled="@isClosed">Zatwierdź</MudButton>
         <MudButton Variant="Variant.Text" Color="Color.Primary" Disabled="@isClosed">Pomiń</MudButton>
     </MudCardActions>
+    <MudOverlay @bind-Visible="@isClosed" DarkBackground="true" AutoClose="true">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" hidden="@(!isClosed)" />
+    </MudOverlay>
+
+    
 </MudCard>
 
 @code {
@@ -34,11 +40,12 @@
 
     ValuationStepOptionDto? selectedOption = null;
 
-    bool isClosed = false;
+    private bool isClosed = false;
 
     async Task Approve()
     {
         isClosed = true;
+        await Task.Delay(500);
 
         await OnApproval.InvokeAsync(selectedOption);
     }
@@ -47,5 +54,12 @@
     {
         selectedOption = null;
         isClosed = true;
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        isClosed = false;
+        selectedOption = null;
+        return base.OnParametersSetAsync();
     }
 }
